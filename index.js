@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 
 var initialState = {name: "Eder", role: "designer", project: "PICI", value: 0};
 var store = createStore(step, initialState);
@@ -58,30 +58,54 @@ function step(prevState, action) {
 
 // Componentes
 
-function Greeter({username, roleName, projectName, log}) {
+function Greeter({name, role, project, log}) {
   if (log) console.log("foo");
-  return (<p> Hello {username}, you are a {roleName} and I'm working in {projectName}</p>);
+  return (<p> Hello {name}, you are a {role} and I'm working in {project}</p>);
 }
 
-function Counter({count}) { 
-return (
+function Counter({count, increment}) { 
+  return (
     <div>
       Your score <span>{count}</span> !  
       <div>
-        <button id="increment" onClick={() => { store.dispatch(incrementCounter(3)) }}>+</button>
+        <button id="increment" onClick={increment}>+</button>
         <button id="decrement">-</button>
       </div>
     </div>
   );
+}
+
+// Wrapper
+
+function RootComponent({name, role, project, value, increment}) {
+  return (
+    <div>
+      <Greeter name={name} role={role} project={project} />
+      <Counter count={value} increment={increment} />
+    </div>
+  )
+}
+
+// Container (decorar)
+
+const RootContainer = connect((state) => {
+  return {
+    name: state.name,
+    role: state.role,
+    project: state.project,
+    value: state.value
   }
+}, (dispatch) => { return {
+  increment: () => dispatch(incrementCounter(3))
+}}
+)(RootComponent);
+
+// Render
 
 var root = document.body.appendChild(document.createElement('div'))
 
 ReactDOM.render(
   <Provider store={store}>
-    <div>
-      <Greeter username={store.getState().name} roleName={store.getState().role} projectName={store.getState().project} />
-      <Counter count={store.getState().value} />
-    </div>
+    <RootContainer />
   </Provider>,
   root)
