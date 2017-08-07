@@ -11,6 +11,7 @@ var CHANGE_NAME = "CHANGE_NAME"
 var CHANGE_ROLE = "CHANGE_ROLE"
 var CHANGE_PROJECT = "CHANGE_PROJECT"
 var INCREMENT_COUNTER = "INCREMENT_COUNTER"
+var DECREMENT_COUNTER = "DECREMENT_COUNTER"
 function changeName(name) {
   return {
     type: CHANGE_NAME,
@@ -35,6 +36,12 @@ function incrementCounter(increment) {
     increment,
   }
 }
+function decrementCounter(decrement) {
+  return {
+    type: DECREMENT_COUNTER,
+    decrement,
+  }
+}
 
 // reducer
 function step(prevState, action) {
@@ -47,6 +54,8 @@ function step(prevState, action) {
       return Object.assign({}, prevState, {project: action.project});
     case INCREMENT_COUNTER:
       return Object.assign({}, prevState,{value: prevState.value + action.increment});
+    case DECREMENT_COUNTER:
+      return Object.assign({}, prevState,{value: prevState.value - action.decrement});
     default:
       return prevState;
   }
@@ -63,13 +72,13 @@ function Greeter({name, role, project, log}) {
   return (<p> Hello {name}, you are a {role} and I'm working in {project}</p>);
 }
 
-function Counter({count, increment}) { 
+function Counter({count, increment, decrement}) { 
   return (
     <div>
       Your score <span>{count}</span> !  
       <div>
         <button id="increment" onClick={increment}>+</button>
-        <button id="decrement">-</button>
+        <button id="decrement" onClick={decrement}>-</button>
       </div>
     </div>
   );
@@ -77,11 +86,11 @@ function Counter({count, increment}) {
 
 // Wrapper
 
-function RootComponent({name, role, project, value, increment}) {
+function RootComponent({name, role, project, value, increment, decrement}) {
   return (
     <div>
       <Greeter name={name} role={role} project={project} />
-      <Counter count={value} increment={increment} />
+      <Counter count={value} increment={increment} decrement={decrement} />
     </div>
   )
 }
@@ -96,7 +105,8 @@ const RootContainer = connect((state) => {
     value: state.value
   }
 }, (dispatch) => { return {
-  increment: () => dispatch(incrementCounter(3))
+  increment: () => dispatch(incrementCounter(1)),
+  decrement: () => dispatch(decrementCounter(2))
 }}
 )(RootComponent);
 
