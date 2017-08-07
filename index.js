@@ -97,18 +97,22 @@ function RootComponent({name, role, project, value, increment, decrement}) {
 
 // Container (decorar)
 
-const RootContainer = connect((state) => {
-  return {
-    name: state.name,
-    role: state.role,
-    project: state.project,
-    value: state.value
+const RootContainer = connect(
+  (state) => {
+    return {
+      name: state.name,
+      role: state.role,
+      project: state.project,
+      value: state.value
+    }
+  },  
+  (dispatch) => { 
+    return {
+      increment: () => dispatch(incrementCounter(1)),
+      decrement: () => dispatch(decrementCounter(2))
   }
-}, (dispatch) => { return {
-  increment: () => dispatch(incrementCounter(1)),
-  decrement: () => dispatch(decrementCounter(2))
-}}
-)(RootComponent);
+})
+(RootComponent);
 
 // Render
 
