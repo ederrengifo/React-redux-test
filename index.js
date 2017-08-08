@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 
+// Initial State and Store
+
 var initialState = {name: "Eder", role: "designer", project: "PICI", value: 0};
 var store = createStore(step, initialState);
 
 // actions
+
 var CHANGE_NAME = "CHANGE_NAME"
 var CHANGE_ROLE = "CHANGE_ROLE"
 var CHANGE_PROJECT = "CHANGE_PROJECT"
 var INCREMENT_COUNTER = "INCREMENT_COUNTER"
 var DECREMENT_COUNTER = "DECREMENT_COUNTER"
+
 function changeName(name) {
   return {
     type: CHANGE_NAME,
